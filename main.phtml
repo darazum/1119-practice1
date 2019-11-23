@@ -1,0 +1,44 @@
+<html>
+<head>
+    <style>
+        .content {margin: 20px 0 40px; 0}
+        .goods {width: 500px; }
+        .good {margin: 5px 0 5px; 0; border: 1px solid grey; display: inline-block; width: 150px; height: 150px; }
+
+        .categories a {color: blue; }
+        .categories a:hover {color: red; }
+        .categories a.selected {color: red; }
+    </style>
+</head>
+<body>
+    <div class="header"></div>
+    <div class="content">
+        <div class="categories">
+            <? $first = true; ?>
+            <? foreach ($CATEGORIES as $category): ?>
+                <? if(!$first):?> | <? endif; ?>
+                <a <?if($categoryId == $category['id']):?>class="selected" <?endif;?>
+                    href="/?category=<?=$category['id'];?>"><?=$category['name'];?></a>
+                <? $first = false; ?>
+            <? endforeach; ?>
+        </div>
+        <h3>Категория: <?=$CATEGORIES[$categoryId]['name'];?></h3>
+        <div class="goods">
+            <? foreach ($categoryGoods as $good):?>
+                <div class="good">
+                    <div class="title">
+                        <?=$good['title'];?>
+                    </div>
+                    Цена: <?=$good['price'];?><br>
+                    <input type="button" value="В корзину" onclick="location.href = '/buy.php/?id=<?=$good['id'];?>'">
+                </div>
+            <? endforeach; ?>
+        </div>
+        <div>
+            <? $myGoods = getMyGoods($_SESSION['goods'] ?? [], $GOODS); ?>
+            В вашей корзине <?=sizeof($_SESSION['goods'])?> товаров на сумму <?=calcPrice($myGoods);?> руб.
+        </div>
+    </div>
+    <div class="footer"></div>
+</body>
+</html>
